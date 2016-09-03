@@ -256,8 +256,13 @@ APP.Main = (function() {
 
     var storyElements = document.querySelectorAll('.story');
 
+    var height = main.offsetHeight;
+    var mainBottom = main.getBoundingClientRect().bottom;
     // It does seem awfully broad to change all the
     // colors every time!
+    var total = Math.ceil(height/90);
+
+    var pos = storyElements[0].querySelector('.story__score').getBoundingClientRect().top;
     for (var s = 0; s < storyElements.length; s++) {
 
       var story = storyElements[s];
@@ -265,23 +270,13 @@ APP.Main = (function() {
       var title = story.querySelector('.story__title');
 
       // Base the scale on the y position of the score.
-      var height = main.offsetHeight;
-      var mainPosition = main.getBoundingClientRect();
-      var scoreLocation = score.getBoundingClientRect().top -
-          document.body.getBoundingClientRect().top;
-      var scale = Math.min(1, 1 - (0.05 * ((scoreLocation - 170) / height)));
-      var opacity = Math.min(1, 1 - (0.5 * ((scoreLocation - 170) / height)));
+      // var scoreLocation = score.getBoundingClientRect().top;
+      pos += 90;
+      var opacity = Math.min(1, 1 - (0.5 * ((pos - 170) / height)));
+      // console.log(scoreLocation);
 
-      score.style.width = (scale * 40) + 'px';
-      score.style.height = (scale * 40) + 'px';
-      score.style.lineHeight = (scale * 40) + 'px';
-
-      // Now figure out how wide it is and use that to saturate it.
-      scoreLocation = score.getBoundingClientRect();
-      var saturation = (100 * ((scoreLocation.width - 38) / 2));
-
-      score.style.backgroundColor = 'hsl(42, ' + saturation + '%, 50%)';
       title.style.opacity = opacity;
+      if(opacity < 0) break;
     }
   }
 
@@ -295,11 +290,13 @@ APP.Main = (function() {
 
   });
 
-  main.addEventListener('scroll', function() {
+  var mainHeight = main.offsetHeight;
 
+  main.addEventListener('scroll', function(e) {
     var header = $('header');
     var headerTitles = header.querySelector('.header__title-wrapper');
-    var scrollTopCapped = Math.min(70, main.scrollTop);
+    var scrollTop =  main.scrollTop;
+    var scrollTopCapped = Math.min(70, scrollTop);
     var scaleString = 'scale(' + (1 - (scrollTopCapped / 300)) + ')';
 
     colorizeAndScaleStories();
@@ -309,15 +306,15 @@ APP.Main = (function() {
     headerTitles.style.transform = scaleString;
 
     // Add a shadow to the header.
-    if (main.scrollTop > 70)
+    if (scrollTop > 70)
       document.body.classList.add('raised');
     else
       document.body.classList.remove('raised');
 
     // Check if we need to load the next batch of stories.
-    var loadThreshold = (main.scrollHeight - main.offsetHeight -
+    var loadThreshold = (e.target.scrollHeight - mainHeight -
         LAZY_LOAD_THRESHOLD);
-    if (main.scrollTop > loadThreshold)
+    if (scrollTop > loadThreshold)
       loadStoryBatch();
   });
 
