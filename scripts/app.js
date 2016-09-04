@@ -263,9 +263,12 @@ APP.Main = (function() {
     var scrollTopCapped = Math.min(70, scrollTop);
     var scaleString = 'scale(' + (1 - (scrollTopCapped / 300)) + ')';
 
-    header.style.height = (156 - scrollTopCapped) + 'px';
-    headerTitles.style.webkitTransform = scaleString;
-    headerTitles.style.transform = scaleString;
+    requestAnimationFrame(function(){
+      header.style.transform = 'translateY(-' + scrollTopCapped + 'px)';
+      headerTitles.style.webkitTransform = scaleString;
+      headerTitles.style.transform = scaleString;
+    });
+
 
     // Add a shadow to the header.
     if (scrollTop > 70)
