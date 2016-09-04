@@ -92,9 +92,7 @@ a {
   opacity: 0.54;
 }
 
-body.details-active .story__title,
-body.details-active .story__by,
-body.details-active .story__score {
+.details-active main{
   transition: opacity 0.5s ease-out;
   opacity: 0 !important;
 }
@@ -148,10 +146,10 @@ main.loading {
   background: #FFF;
   background: linear-gradient(to bottom, #FFF 0%,#F4F4F4 100%);
   position: relative;
-  min-height: 90px;
-  cursor: pointer;
-  transition: all 0.4s ease-out;
-}
+/*  min-height: 90px;
+*/  cursor: pointer;
+/*  transition: all 0.4s ease-out;
+*/}
 
 .story:after {
   display: block;
@@ -242,7 +240,7 @@ main.loading {
 }
 
 .story-details * {
-  will-change: transform;
+ /* will-change: transform;*/
   /*transform: translateZ(0);*/
 }
 
@@ -279,6 +277,7 @@ main.loading {
 .story-details__header {
   padding: 16px 16px 64px 72px;
   background: #FFA000;
+  position: relative;
 /*  position: absolute;
   left: 0;
   top: 0;*/
